@@ -41,6 +41,10 @@ const reportTypeDef = gql`
   type Shipment {
     id: ID
     shipment: String
+    trucker: String
+    totalDeliveries: String
+    driver: String
+    porter: String
     varianceReport: [VarianceReport]
     completeReport: CompleteReport
   }
@@ -48,15 +52,35 @@ const reportTypeDef = gql`
   type Vendor {
     id: ID
     vendor: String
+    closeShipment: String
+    totalShipment: String
     varianceReport: [VarianceReport]
     completeReport: CompleteReport
+  }
+
+  type MaterialDetails {
+    id: ID
+    itemNumber: String
+    material: String
+    uom: String
+    qty: String
   }
 
   type Customer {
     id: ID
     customer: String
-    varianceReport: [VarianceReport]
-    completeReport: CompleteReport
+    shipment: String
+    delivery: String
+    noVarianceMaterial: [MaterialDetails]
+    withVarianceMaterial: [MaterialDetails]
+    varianceReport: VarianceReport
+    materialReport: MaterialReport
+  }
+
+  type MaterialReport {
+    id: ID
+    totalReceived: String
+    totalVariance: String
   }
 
   type Delivery {
@@ -86,12 +110,12 @@ const reportTypeDef = gql`
 
   type Query {
     shipmentReport(shipmentNo: String): Shipment
-    allShipmentReport: [Shipment]
+    allShipmentReport(dateFrom: String, dateTo: String): [Shipment]
     vendorReport(vendor: String): Vendor
-    allVendorReport: [Vendor]
+    allVendorReport(dateFrom: String, dateTo: String): [Vendor]
     customerReport(customer: String): Customer
-    allCustomerReport: [Customer]
-    allDeliverys: [Delivery]
+    allCustomerReport(dateFrom: String, dateTo: String): [Customer]
+    allDeliverys(dateFrom: String, dateTo: String): [Delivery]
     loginAuth(userBase: String!): Message
   }
 `
